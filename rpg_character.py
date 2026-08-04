@@ -1,0 +1,42 @@
+# RPG Character Creator 
+
+full_dot = '●'
+empty_dot = '○'
+MAX_STAT = 10
+
+
+def create_character(name, strength, intelligence, charizma):
+
+    if not isinstance(name, str):
+        return 'The character name should be a string'
+    elif name == '':
+        return 'The character should have a name'
+    elif len(name) > 10:
+        return 'The character name is too long'
+    elif ' ' in name:
+        return 'The character name should not contain spaces'
+
+    if not isinstance(strength, int) or not isinstance(intelligence, int) or not isinstance(charizma, int):
+        return 'All stats should be integers'
+    elif strength < 1 or intelligence < 1 or charizma < 1:
+        return 'All stats should be no less than 1'
+    elif strength > 4 or intelligence > 4 or charizma > 4:
+        return 'All stats should be no more than 4'
+    elif sum([strength, intelligence, charizma]) != 7:
+        return 'The character should start with 7 points'
+    character_stats = stats(strength, intelligence, charizma)
+
+    return f'{name}\n{character_stats}'
+
+
+def stats(strength, intelligence, charizma):
+    stat_string = empty_dot * MAX_STAT
+    strn = stat_string.replace(empty_dot,full_dot, strength)
+    intl = stat_string.replace(empty_dot,full_dot, intelligence)
+    char = stat_string.replace(empty_dot, full_dot, charizma)
+
+    return f'STR {strn}\nINT {intl}\nCHA {char}'
+
+
+print(create_character(input('Hero name: '), int(input('STR: ')), int(input('INT: ')), int(input('CHA: '))))
+
