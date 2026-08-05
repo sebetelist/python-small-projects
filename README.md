@@ -33,3 +33,7 @@ python rpg_character.py
 ## About
 
 These are learning projects — each one was built step by step while getting comfortable with Python fundamentals: functions, loops, conditionals, string formatting, and basic error handling.
+
+## Project Page
+
+`guess_game.py` was built as part of the roadmap.sh challenge: https://roadmap.sh/projects/number-guessing-game
