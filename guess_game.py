@@ -42,14 +42,14 @@ def user_guess_try(number, chances):
     attempts = 0
     try:
         while True:
-            user_guess = int(input('\nEnter your guess: '))
+            user_guess = int(input('\nEnter your guess number: '))
             if user_guess != number:
                 chances -= 1
                 attempts += 1
                 direction = 'greater' if number > user_guess else 'less'
                 print(f'Incorrect! The number is {direction} than {user_guess}. You have {chances} attempts.')
                 if chances == 0:
-                    print("You lose :(")
+                    print(f"You lose :( The number was {number}")
                     break
             else:
                 attempts += 1
@@ -73,17 +73,15 @@ Please select the difficulty level:
 2. Medium (5 chances)
 3. Hard (3 chances)\n"""
 
-print(welcome_input_message)
 
-while True:
-    
+while True: 
+    print(welcome_input_message)  
     chances = user_choose_difficulty_level()
     number = select_random_number()
     user_guess_try(number, chances)
-
     try:
         play_again = input('\nWould you like to play again? Yes/No: ')
-        if play_again.lower() != 'yes':
+        if play_again.lower() != 'yes' and play_again.lower() != 'y':
             print('\nExit...')
             break
     except KeyboardInterrupt:
