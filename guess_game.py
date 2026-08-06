@@ -14,6 +14,7 @@ Otherwise, the game will continue until the user runs out of chances.
 EASY_CHANCES = 10
 MEDIUM_CHANCES = 5
 HARD_CHANCES = 3
+EXIT_MESSAGE = "\nExit..."
 
 
 def select_random_number():
@@ -39,15 +40,15 @@ def user_choose_difficulty_level():
             else:
                 print("Please enter 1, 2 or 3")
     except KeyboardInterrupt:
-        print("\nExit...")
+        print(EXIT_MESSAGE)
         return None, None
 
 
 def user_guess_try(number, chances):
     start = time.perf_counter()
     attempts = 0
-    try:
-        while True:
+    while True:
+        try:
             user_guess = int(input("\nEnter your guess number: "))
             if user_guess != number:
                 chances -= 1
@@ -68,12 +69,12 @@ def user_guess_try(number, chances):
                 )
                 return attempts, True
 
-    except KeyboardInterrupt:
-        print("\nExit...")
-        return attempts, None
-    except ValueError:
-        print("\nIt should be a number!")
-        return attempts, None
+        except KeyboardInterrupt:
+            print(EXIT_MESSAGE)
+            return attempts, None
+        except ValueError:
+            print("\nIt should be a number!")
+            continue
 
 
 def user_score(difficulty, attempts):
@@ -101,13 +102,15 @@ while True:
     number = select_random_number()
 
     attempts, won = user_guess_try(number, chances)
+    if won is None:
+        break
     score = user_score(difficulty, attempts)
 
     try:
         play_again = input("\nWould you like to play again? Yes/No: ")
         if play_again.lower() != "yes" and play_again.lower() != "y":
-            print("\nExit...")
+            print(EXIT_MESSAGE)
             break
     except KeyboardInterrupt:
-        print("\nExit...")
+        print(EXIT_MESSAGE)
         break
