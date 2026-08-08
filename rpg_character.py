@@ -6,18 +6,21 @@ MAX_STAT = 10
 
 
 class Character:
+    # Represents a single RPG character with a name and three core stats.
     def __init__(self, name, strength, intelligence, charizma):
         self.name = name
         self.strength = strength
         self.intelligence = intelligence
         self.charizma = charizma
 
+    # Pick a class (Warrior/Mage/Bard) based on the character's highest stat.
     def choose_class(self):
         class_descriptions = {
             "Warrior": "A fearless fighter, strong in battle.",
             "Mage": "A master of arcane knowledge.",
             "Bard": "A charismatic storyteller and performer.",
         }
+        # Warrior wins ties with Mage and Bard; Mage wins ties with Bard.
         if self.strength >= self.intelligence and self.strength >= self.charizma:
             char_class = "Warrior"
         elif self.intelligence >= self.charizma:
@@ -26,6 +29,7 @@ class Character:
             char_class = "Bard"
         return char_class, class_descriptions.get(char_class)
 
+    # Build a visual bar (●●●○○○○○○○) for each stat.
     def stats(self):
         stat_string = empty_dot * MAX_STAT
         strn = stat_string.replace(empty_dot, full_dot, self.strength)
@@ -34,8 +38,9 @@ class Character:
 
         return f"STR {strn}\nINT {intl}\nCHA {char}"
 
+    # Check that the character's data follows all the rules.
     def validate_character(self):
-
+        # --- Name validation ---
         if not isinstance(self.name, str):
             return "The character name should be a string"
         elif self.name == "":
@@ -44,7 +49,7 @@ class Character:
             return "The character name is too long"
         elif " " in self.name:
             return "The character name should not contain spaces"
-
+        # --- Stats validation ---
         if (
             not isinstance(self.strength, int)
             or not isinstance(self.intelligence, int)
@@ -57,11 +62,15 @@ class Character:
             return "All stats should be no more than 4"
         elif sum([self.strength, self.intelligence, self.charizma]) != 7:
             return "The character should start with 7 points"
+
+        # --- All checks passed: build the final character sheet ---
         character_stats = self.stats()
         hero_class, hero_description = self.choose_class()
 
         return f"{self.name}\n{hero_class}: {hero_description}\n{character_stats}"
 
+
+# --- Program entry point ---
 
 try:
     hero = Character(
