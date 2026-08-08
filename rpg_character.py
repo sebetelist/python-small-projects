@@ -25,8 +25,9 @@ def create_character(name, strength, intelligence, charizma):
     elif sum([strength, intelligence, charizma]) != 7:
         return 'The character should start with 7 points'
     character_stats = stats(strength, intelligence, charizma)
+    hero_class, hero_description = choose_class(strength, intelligence, charizma)
 
-    return f'{name}\n{character_stats}'
+    return f"{name}\n{hero_class}: {hero_description}\n{character_stats}"
 
 
 def stats(strength, intelligence, charizma):
@@ -37,6 +38,27 @@ def stats(strength, intelligence, charizma):
 
     return f'STR {strn}\nINT {intl}\nCHA {char}'
 
+def choose_class(strength, intelligence, charizma):
+    class_descriptions = {
+    'Warrior': 'A fearless fighter, strong in battle.',
+    'Mage': 'A master of arcane knowledge.',
+    'Bard': 'A charismatic storyteller and performer.'
+}
+    if strength >= intelligence and strength >= charizma:
+        char_class = 'Warrior'
+    elif intelligence >= charizma:
+        char_class = 'Mage'
+    else:
+        char_class = 'Bard'
+    return char_class, class_descriptions.get(char_class)
 
-print(create_character(input('Hero name: '), int(input('STR: ')), int(input('INT: ')), int(input('CHA: '))))
+
+
+try:
+    print(create_character(input('Hero name: '), int(input('STR: ')), int(input('INT: ')), int(input('CHA: '))))
+except KeyboardInterrupt:
+    print('\nExit')
+except ValueError:
+    print('\nAll stats shoul be numbers')
+
 
