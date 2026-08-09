@@ -1,90 +1,82 @@
 import random
 import time
 
-# import json 
+# import json
 # TODO: import json — planned for saving high scores to file
 
-""" 
-A simple number guessing game where 
-the computer randomly selects a number and the user has to guess it. 
-The user will be given a limited number of chances to guess the number. 
-If the user guesses the number correctly, the game will end, and the user will win. 
-Otherwise, the game will continue until the user runs out of chances.
-"""
+
 EASY_CHANCES = 10
 MEDIUM_CHANCES = 5
 HARD_CHANCES = 3
 EXIT_MESSAGE = "\nExit..."
 
 
-# Computer selects a random number between 1 and 100.
-def select_random_number():
-    number = random.randint(1, 100)
-    return number
+class GuessingGame:
+    def __init__(self):
+        self.difficulty = None
+        self.chances = None
+        self.number = None
+        self.attempts = 0
 
+    # Computer selects a random number between 1 and 100.
+    def select_random_number(self):
+        self.number = random.randint(1, 100)
 
-# User chooses a difficulty level and receives attempts.
-def user_choose_difficulty_level():
-    modes = {
-        "1": ("Easy", EASY_CHANCES),
-        "2": ("Medium", MEDIUM_CHANCES),
-        "3": ("Hard", HARD_CHANCES),
-    }
-    try:
-        while True:
-            choice = input("Enter your choice: ")
-            if choice in modes:
-                difficulty, chances = modes[choice]
-                print(
-                    f"\nGreat! You have selected the {difficulty} difficulty level.\nLet's start the game!"
-                )
-                return difficulty, chances
-            else:
-                print("Please enter 1, 2 or 3")
-    except KeyboardInterrupt:
-        print(EXIT_MESSAGE)
-        return None, None
-
-
-# User tries to guess a number.
-def user_guess_try(number, chances):
-    start = time.perf_counter()
-    attempts = 0
-    while True:
+    # User chooses a difficulty level and receives attempts.
+    def user_choose_difficulty_level(self):
+        modes = {
+            "1": ("Easy", EASY_CHANCES),
+            "2": ("Medium", MEDIUM_CHANCES),
+            "3": ("Hard", HARD_CHANCES),
+        }
         try:
-            user_guess = int(input("\nEnter your guess number: "))
-            if user_guess != number:
-                chances -= 1
-                attempts += 1
-                direction = "greater" if number > user_guess else "less"
-                print(
-                    f"Incorrect! The number is {direction} than {user_guess}. You have {chances} attempts."
-                )
-                if chances == 0:
-                    print(f"You lose :( The number was {number}")
-                    return attempts, False
-
-            else:
-                attempts += 1
-                end = time.perf_counter()
-                print(
-                    f"Congratulations! You guessed the correct number {number} in {attempts} attempts in {end - start:.1f} sec."
-                )
-                return attempts, True
-
+            while True:
+                choice = input("Enter your choice: ")
+                if choice in modes:
+                    self.difficulty, self.chances = modes[choice]
+                    print(f"\nGreat! You have selected the {
+                            self.difficulty} difficulty level.\nLet's start the game!")
+                    return True
+                else:
+                    print("Please enter 1, 2 or 3")
         except KeyboardInterrupt:
             print(EXIT_MESSAGE)
-            return attempts, None
-        except ValueError:
-            print("\nIt should be a number!")
-            continue
+            return False
 
 
-# Function shows the user score.
-def user_score(difficulty, attempts):
-    score = {"Difficulty": difficulty, "Attempts": attempts}
-    print(f"Difficulty: {score['Difficulty']}, Attempts: {score['Attempts']}")
-    return score
+    # User tries to guess the number.
+    def user_guess_try(self):
+        start = time.perf_counter()
+        while True:
+            try:
+                user_guess = int(input("\nEnter your guess number: "))
+                if user_guess != self.number:
+                    self.chances -= 1
+                    self.attempts += 1
+                    direction = "greater" if self.number > user_guess else "less"
+                    print(f"Incorrect! The number is {direction} than {
+                            user_guess}. You have {self.chances} attempts.")
+                    if self.chances == 0:
+                        print(f"You lose :( The number was {self.number}")
+                        return False
+                else:
+                    self.attempts += 1
+                    end = time.perf_counter()
+                    print(
+                        f"Congratulations! You guessed the correct number {self.number} in {
+                            self.attempts} attempts in {end - start:.1f} sec."
+                    )
+                    return True
+            except KeyboardInterrupt:
+                print(EXIT_MESSAGE)
+                return None
+            except ValueError:
+                print("\nIt should be a number!")
+                continue
+
+    # Shows the user's score for this round.
+    def user_score(self):
+        print(f"Difficulty: {self.difficulty}, Attempts: {self.attempts}")
 
 
 welcome_input_message = """
@@ -97,23 +89,22 @@ Please select the difficulty level:
 2. Medium (5 chances)
 3. Hard (3 chances)\n"""
 
+
 # Start the game.
 while True:
     print(welcome_input_message)
-    difficulty, chances = user_choose_difficulty_level()
-    if difficulty is None:
+    game = GuessingGame()
+    if not game.user_choose_difficulty_level():
         break
-    number = select_random_number()
-
-    attempts, won = user_guess_try(number, chances)
+    game.select_random_number()
+    won = game.user_guess_try()
     if won is None:
         break
-    score = user_score(difficulty, attempts)
-    
-    # If the user would like to continue the game.
+    game.user_score()
+
     try:
         play_again = input("\nWould you like to play again? Yes/No: ")
-        if play_again.lower() != "yes" and play_again.lower() != "y":
+        if play_again.lower() not in ("yes", "y"):
             print(EXIT_MESSAGE)
             break
     except KeyboardInterrupt:
