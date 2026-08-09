@@ -1,8 +1,8 @@
 import random
 import time
 
-# import json
-
+# import json 
+# TODO: import json — planned for saving high scores to file
 
 """ 
 A simple number guessing game where 
@@ -17,11 +17,13 @@ HARD_CHANCES = 3
 EXIT_MESSAGE = "\nExit..."
 
 
+# Computer selects a random number between 1 and 100.
 def select_random_number():
     number = random.randint(1, 100)
     return number
 
 
+# User chooses a difficulty level and receives attempts.
 def user_choose_difficulty_level():
     modes = {
         "1": ("Easy", EASY_CHANCES),
@@ -44,6 +46,7 @@ def user_choose_difficulty_level():
         return None, None
 
 
+# User tries to guess a number.
 def user_guess_try(number, chances):
     start = time.perf_counter()
     attempts = 0
@@ -77,6 +80,7 @@ def user_guess_try(number, chances):
             continue
 
 
+# Function shows the user score.
 def user_score(difficulty, attempts):
     score = {"Difficulty": difficulty, "Attempts": attempts}
     print(f"Difficulty: {score['Difficulty']}, Attempts: {score['Attempts']}")
@@ -93,7 +97,7 @@ Please select the difficulty level:
 2. Medium (5 chances)
 3. Hard (3 chances)\n"""
 
-
+# Start the game.
 while True:
     print(welcome_input_message)
     difficulty, chances = user_choose_difficulty_level()
@@ -105,7 +109,8 @@ while True:
     if won is None:
         break
     score = user_score(difficulty, attempts)
-
+    
+    # If the user would like to continue the game.
     try:
         play_again = input("\nWould you like to play again? Yes/No: ")
         if play_again.lower() != "yes" and play_again.lower() != "y":
