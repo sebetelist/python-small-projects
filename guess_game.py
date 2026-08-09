@@ -77,6 +77,10 @@ class GuessingGame:
     # Shows the user's score for this round.
     def user_score(self):
         print(f"Difficulty: {self.difficulty}, Attempts: {self.attempts}")
+        
+    # TODO: user_hints() — planned for giving hints to the user  
+    def user_hints(self):
+        pass
 
 
 welcome_input_message = """
