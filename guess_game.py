@@ -12,19 +12,19 @@ EXIT_MESSAGE = "\nExit..."
 
 
 class GuessingGame:
-    def __init__(self):
-        self.difficulty = None
-        self.chances = None
-        self.number = None
-        self.attempts = 0
+    def __init__(self) -> None:
+        self.difficulty: str | None = None
+        self.chances: int | None = None
+        self.number: int | None = None
+        self.attempts: int = 0
 
     # Computer selects a random number between 1 and 100.
-    def select_random_number(self):
+    def select_random_number(self) -> None:
         self.number = random.randint(1, 100)
 
     # User chooses a difficulty level and receives attempts.
-    def user_choose_difficulty_level(self):
-        modes = {
+    def user_choose_difficulty_level(self) -> bool:
+        modes: dict[str, tuple[str, int]] = {
             "1": ("Easy", EASY_CHANCES),
             "2": ("Medium", MEDIUM_CHANCES),
             "3": ("Hard", HARD_CHANCES),
@@ -34,8 +34,7 @@ class GuessingGame:
                 choice = input("Enter your choice: ")
                 if choice in modes:
                     self.difficulty, self.chances = modes[choice]
-                    print(f"\nGreat! You have selected the {
-                            self.difficulty} difficulty level.\nLet's start the game!")
+                    print(f"\nGreat! You have selected the {self.difficulty} difficulty level.\nLet's start the game!")
                     return True
                 else:
                     print("Please enter 1, 2 or 3")
@@ -45,26 +44,26 @@ class GuessingGame:
 
 
     # User tries to guess the number.
-    def user_guess_try(self):
-        start = time.perf_counter()
+    def user_guess_try(self) -> None | bool:
+        assert self.number is not None
+        assert self.chances is not None
+        start: float = time.perf_counter()
         while True:
             try:
                 user_guess = int(input("\nEnter your guess number: "))
                 if user_guess != self.number:
                     self.chances -= 1
                     self.attempts += 1
-                    direction = "greater" if self.number > user_guess else "less"
-                    print(f"Incorrect! The number is {direction} than {
-                            user_guess}. You have {self.chances} attempts.")
+                    direction:str = "greater" if self.number > user_guess else "less"
+                    print(f"Incorrect! The number is {direction} than {user_guess}. You have {self.chances} attempts.")
                     if self.chances == 0:
                         print(f"You lose :( The number was {self.number}")
                         return False
                 else:
                     self.attempts += 1
-                    end = time.perf_counter()
+                    end: float = time.perf_counter()
                     print(
-                        f"Congratulations! You guessed the correct number {self.number} in {
-                            self.attempts} attempts in {end - start:.1f} sec."
+                        f"Congratulations! You guessed the correct number {self.number} in {self.attempts} attempts in {end - start:.1f} sec."
                     )
                     return True
             except KeyboardInterrupt:
@@ -75,11 +74,11 @@ class GuessingGame:
                 continue
 
     # Shows the user's score for this round.
-    def user_score(self):
+    def user_score(self) -> None:
         print(f"Difficulty: {self.difficulty}, Attempts: {self.attempts}")
         
     # TODO: user_hints() — planned for giving hints to the user  
-    def user_hints(self):
+    def user_hints(self) -> None:
         pass
 
 
