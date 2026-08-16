@@ -7,14 +7,14 @@ MAX_STAT = 10
 
 class Character:
     # Represents a single RPG character with a name and three core stats.
-    def __init__(self, name, strength, intelligence, charizma):
+    def __init__(self, name: str, strength: int, intelligence: int, charizma: int) -> None:
         self.name = name
         self.strength = strength
         self.intelligence = intelligence
         self.charizma = charizma
 
     # Pick a class (Warrior/Mage/Bard) based on the character's highest stat.
-    def choose_class(self):
+    def choose_class(self) -> tuple[str, str | None]:
         class_descriptions = {
             "Warrior": "A fearless fighter, strong in battle.",
             "Mage": "A master of arcane knowledge.",
@@ -30,7 +30,7 @@ class Character:
         return char_class, class_descriptions.get(char_class)
 
     # Build a visual bar (●●●○○○○○○○) for each stat.
-    def stats(self):
+    def stats(self) -> str:
         stat_string = empty_dot * MAX_STAT
         strn = stat_string.replace(empty_dot, full_dot, self.strength)
         intl = stat_string.replace(empty_dot, full_dot, self.intelligence)
@@ -39,7 +39,7 @@ class Character:
         return f"STR {strn}\nINT {intl}\nCHA {char}"
 
     # Check that the character's data follows all the rules.
-    def validate_character(self):
+    def validate_character(self) -> str:
         # --- Name validation ---
         if not isinstance(self.name, str):
             return "The character name should be a string"
