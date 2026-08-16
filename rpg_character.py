@@ -14,7 +14,7 @@ class Character:
         self.charizma = charizma
 
     # Pick a class (Warrior/Mage/Bard) based on the character's highest stat.
-    def choose_class(self) -> tuple[str, str | None]:
+    def choose_class(self) -> tuple[str, str]:
         class_descriptions = {
             "Warrior": "A fearless fighter, strong in battle.",
             "Mage": "A master of arcane knowledge.",
@@ -27,7 +27,7 @@ class Character:
             char_class = "Mage"
         else:
             char_class = "Bard"
-        return char_class, class_descriptions.get(char_class)
+        return char_class, class_descriptions[char_class]
 
     # Build a visual bar (●●●○○○○○○○) for each stat.
     def stats(self) -> str:
