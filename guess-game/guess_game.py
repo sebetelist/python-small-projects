@@ -24,7 +24,6 @@ class ScoreStorage:
         with open(self.filepath, "w") as f:
             json.dump(data, f, indent=2)
         
-        
 
 class GuessingGame:
     def __init__(self, storage: ScoreStorage) -> None:
@@ -93,7 +92,22 @@ class GuessingGame:
     def user_score(self) -> None:
         print(f"Difficulty: {self.difficulty}, Attempts: {self.attempts}")
         data = self.storage.load()
-        data.append({"difficulty": self.difficulty, "attempts": self.attempts})
+        
+        existing = None
+        for entry in data:
+            if entry["difficulty"] == self.difficulty:
+                existing = entry
+                break
+    
+        if existing is None:
+            data.append({"difficulty": self.difficulty, "attempts": self.attempts})
+            print("New record saved!")
+        elif self.attempts < existing["attempts"]:
+            existing["attempts"] = self.attempts
+            print("New best record!")
+        else:
+            print("Not a new record, previous result kept.")
+        
         self.storage.save(data)
         
         
