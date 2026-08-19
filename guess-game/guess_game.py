@@ -138,7 +138,8 @@ while True:
     won = game.user_guess_try()
     if won is None:
         break
-    game.user_score()
+    if won:  
+        game.user_score()
 
     try:
         play_again = input("\nWould you like to play again? Yes/No: ")
