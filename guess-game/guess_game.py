@@ -84,6 +84,10 @@ class GuessingGame:
         except json.decoder.JSONDecodeError:
             return []
         
+    def write_file(self, data):
+        with open("data.json", "w") as f:
+            json.dump(data, f, indent=2)
+        
     # TODO: user_hints() — planned for giving hints to the user  
     def user_hints(self) -> None:
         pass
