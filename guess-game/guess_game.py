@@ -74,6 +74,13 @@ class GuessingGame:
     # Shows the user's score for this round.
     def user_score(self) -> None:
         print(f"Difficulty: {self.difficulty}, Attempts: {self.attempts}")
+        data = self.check_file()
+        
+        data.append({
+            "difficulty:" : self.difficulty,
+            "attempts" : self.attempts
+        })
+        self.write_file(data)
         
     def check_file(self):
         try:
