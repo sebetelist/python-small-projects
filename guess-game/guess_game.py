@@ -9,8 +9,26 @@ HARD_CHANCES = 3
 EXIT_MESSAGE = "\nExit..."
 
 
+class ScoreStorage:
+    def __init__(self, filepath='data.json'):
+        self.filepath = filepath
+        
+    def load(self):
+        try:
+            with open(self.filepath, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.decoder.JSONDecodeError):
+            return []
+        
+    def save(self, data):
+        with open(self.filepath, "w") as f:
+            json.dump(data, f, indent=2)
+        
+        
+
 class GuessingGame:
-    def __init__(self) -> None:
+    def __init__(self, storage: ScoreStorage) -> None:
+        self.storage = storage
         self.difficulty: str | None = None
         self.chances: int | None = None
         self.number: int | None = None
@@ -74,26 +92,10 @@ class GuessingGame:
     # Shows the user's score for this round.
     def user_score(self) -> None:
         print(f"Difficulty: {self.difficulty}, Attempts: {self.attempts}")
-        data = self.check_file()
+        data = self.storage.load()
+        data.append({"difficulty": self.difficulty, "attempts": self.attempts})
+        self.storage.save(data)
         
-        data.append({
-            "difficulty:" : self.difficulty,
-            "attempts" : self.attempts
-        })
-        self.write_file(data)
-        
-    def check_file(self):
-        try:
-            with open('data.json', 'r') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return []
-        except json.decoder.JSONDecodeError:
-            return []
-        
-    def write_file(self, data):
-        with open("data.json", "w") as f:
-            json.dump(data, f, indent=2)
         
     # TODO: user_hints() — planned for giving hints to the user  
     def user_hints(self) -> None:
@@ -110,11 +112,12 @@ Please select the difficulty level:
 2. Medium (5 chances)
 3. Hard (3 chances)\n"""
 
+storage = ScoreStorage()
 
 # Start the game.
 while True:
     print(welcome_input_message)
-    game = GuessingGame()
+    game = GuessingGame(storage)
     if not game.user_choose_difficulty_level():
         break
     game.select_random_number()
